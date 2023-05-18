@@ -5,7 +5,7 @@ import (
 )
 
 // Set up routes for authentication
-func setupAuthRoutes(r *gin.Engine) {
+func SetupAuthRoutes(r *gin.Engine) {
 	authRoutes := r.Group("/auth")
 	{
 		authRoutes.POST("/login", loginHandler)
@@ -15,21 +15,18 @@ func setupAuthRoutes(r *gin.Engine) {
 }
 
 func loginHandler(c *gin.Context) {
-	// Your login logic here
 	c.JSON(200, gin.H{
 		"message": "Login successful",
 	})
 }
 
 func registerHandler(c *gin.Context) {
-	// Your registration logic here
 	c.JSON(200, gin.H{
 		"message": "Registration successful",
 	})
 }
 
 func logoutHandler(c *gin.Context) {
-	// Your logout logic here
 	c.JSON(200, gin.H{
 		"message": "Logout successful",
 	})
