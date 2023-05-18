@@ -1,0 +1,4 @@
+curl -X ... \
+    -H "Authorization: Bearer $token" \
+    -H "X-api-key: API_KEY" \
+    -H "Content-Type: application/json; charset=utf-8" \
