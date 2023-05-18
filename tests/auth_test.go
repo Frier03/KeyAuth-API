@@ -1,6 +1,7 @@
 package tests
 
 import (
+	"bytes"
 	"fmt"
 	"net/http"
 	"net/http/httptest"
@@ -17,8 +18,16 @@ func TestLoginHandler(t *testing.T) {
 	// Set up authentication routes
 	routes.SetupAuthRoutes(r)
 
+	// Create request body
+	reqBody := bytes.NewBufferString(`
+		{
+			"username": "John",
+			"password": "Doe"
+		}
+	`)
+
 	// Create a test request to the login endpoint
-	req, err := http.NewRequest("POST", "/auth/login", nil)
+	req, err := http.NewRequest("POST", "/auth/login", reqBody)
 	if err != nil {
 		t.Fatal(err)
 	}
