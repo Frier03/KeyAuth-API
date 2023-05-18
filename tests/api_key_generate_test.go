@@ -18,7 +18,7 @@ func TestAPIKeyGenerateHandler(t *testing.T) {
 	routes.SetupAPIKeyRoutes(r)
 
 	// Create a test request to the login endpoint
-	req, err := http.NewRequest("GET", "/api-key/generate", nil)
+	req, err := http.NewRequest("GET", "/api-key/usage", nil)
 	if err != nil {
 		t.Fatal(err)
 	}
