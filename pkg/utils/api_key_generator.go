@@ -1,12 +1,29 @@
 package utils
 
-// Function to generate an authentication key
+import (
+	"crypto/md5"
+	"encoding/hex"
+	"strings"
+
+	"github.com/google/uuid"
+)
+
+// Function to generate a modified API key
 func GenerateAPIKey() string {
-	// Generate a random authentication key or use a predefined key for testing/debugging purposes
-	// You can implement your logic here to generate or retrieve an authentication key
+	// Generate a UUID
+	id := uuid.New()
 
-	// For demonstration purposes, we'll use a static authentication key
-	API_KEY := "debug-api-key"
+	// Convert the UUID to a string
+	uuidStr := id.String()
 
-	return API_KEY
+	// Hash the UUID using MD5
+	hash := md5.Sum([]byte(uuidStr))
+
+	// Convert the hash to a hexadecimal string
+	hashStr := hex.EncodeToString(hash[:])
+
+	// Join the UUID and hash strings
+	apiKey := strings.Join([]string{uuidStr, hashStr}, "-")
+
+	return apiKey
 }
