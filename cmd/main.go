@@ -1,8 +1,9 @@
 package main
 
 import (
-	"github.com/Frier03/KeyAuth-API/pkg/routes"
 	"github.com/gin-gonic/gin"
+
+	"github.com/Frier03/KeyAuth-API/pkg/routes"
 )
 
 func main() {
@@ -24,6 +25,11 @@ func main() {
 
 	// Set up authentication routes
 	routes.SetupAuthRoutes(r)
+
+	// Set up api key routes
+	routes.SetupAPIKeyRoutes(r)
+
+	// Set up auth keys debug routes
 
 	r.Run(":8080") // Start the server
 }
