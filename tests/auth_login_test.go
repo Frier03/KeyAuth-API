@@ -11,7 +11,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func TestLoginHandler(t *testing.T) {
+func TestAuthLoginHandler(t *testing.T) {
 	// Create a new Gin router
 	r := gin.Default()
 
