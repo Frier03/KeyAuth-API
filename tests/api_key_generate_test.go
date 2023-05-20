@@ -1,6 +1,7 @@
 package tests
 
 import (
+	"bytes"
 	"fmt"
 	"net/http"
 	"net/http/httptest"
@@ -17,8 +18,15 @@ func TestAPIKeyGenerateHandler(t *testing.T) {
 	// Set up authentication routes
 	routes.SetupAPIKeyRoutes(r)
 
+	// Create request body
+	reqBody := bytes.NewBufferString(`
+		{
+			"UUID": "a1f44782-6499-4d1e-948d-1ab37ad23b82-9a79bc5f585b0d7002a3400943585372"
+		}
+	`)
+
 	// Create a test request to the login endpoint
-	req, err := http.NewRequest("GET", "/api-key/usage", nil)
+	req, err := http.NewRequest("GET", "/api-key/generate", reqBody)
 	if err != nil {
 		t.Fatal(err)
 	}
