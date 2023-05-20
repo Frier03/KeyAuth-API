@@ -3,33 +3,36 @@ package main
 import (
 	"github.com/gin-gonic/gin"
 
+	"github.com/Frier03/KeyAuth-API/pkg/dependencies"
 	"github.com/Frier03/KeyAuth-API/pkg/routes"
 )
 
 func main() {
+	// Create a new Gin Router
 	r := gin.Default()
 
-	// Set ForwardedByClientIP to true to trust the X-Forwarded-For header
-	// This ensures that the correct client IP is used in the request context
 	r.ForwardedByClientIP = true
 
-	// Set trusted proxies to handle X-Forwarded-For headers
 	r.SetTrustedProxies([]string{
-		"127.0.0.1", // IPv4 address for localhost
-		"::1",       // IPv6 address for localhost
-		"localhost", // Hostname for localhost
+		"127.0.0.1",
+		"::1",
+		"localhost",
 	})
 
 	// Running GIN in "debug" mode. Switch to "release" mode in production.
 	gin.SetMode(gin.DebugMode) //gin.ReleaseMode
 
+	// Create dependencies
+	deps, err := dependencies.NewDependencies()
+	if err != nil {
+		return
+	}
+
 	// Set up authentication routes
 	routes.SetupAuthRoutes(r)
 
 	// Set up api key routes
-	routes.SetupAPIKeyRoutes(r)
+	routes.SetupAPIKeyRoutes(r, *deps)
 
-	// Set up auth keys debug routes
-
-	r.Run(":8080") // Start the server
+	r.Run(":8080")
 }
