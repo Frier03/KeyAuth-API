@@ -37,7 +37,13 @@ func ValidateModelMiddleware(model interface{}) gin.HandlerFunc {
 				return
 			}
 
-		// Add cases for other models as needed
+		case *models.APIKeyGenerateRequest:
+			if m.UUID == "" {
+				c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+					"error": "Missing required fields",
+				})
+				return
+			}
 
 		default:
 			c.AbortWithStatus(http.StatusInternalServerError)
