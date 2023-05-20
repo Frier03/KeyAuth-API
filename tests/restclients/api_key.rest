@@ -1,0 +1,6 @@
+GET http://localhost:8080/api-key/generate
+Content-Type: application/json
+
+{
+    "UUID": "a1f44782-6499-4d1e-948d-1ab37ad23b82-9a79bc5f585b0d7002a3400943585372"
+}
