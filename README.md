@@ -1,2 +1,1 @@
-# KeyAuth-API
-API key-based authentication
+# KeyAuth-API (README.md coming soon - project in progress)
