@@ -17,11 +17,14 @@ func SetupAPIKeyRoutes(r *gin.Engine, deps dependencies.Dependencies) {
 			middleware.ValidateModelMiddleware(&models.APIKeyGenerateRequest{}),
 			func(c *gin.Context) {
 				controllers.GenerateAPIKeyHandler(c, deps)
-			})
+			},
+		)
 
 		apiKeyRoutes.GET("/usage",
 			middleware.APIKeyValidationMiddleware(),
-			controllers.APIKeyUsageHandler,
+			func(c *gin.Context) {
+				controllers.APIKeyUsageHandler(c, deps)
+			},
 		)
 	}
 }
