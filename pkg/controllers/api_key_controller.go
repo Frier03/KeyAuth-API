@@ -49,7 +49,7 @@ func GenerateAPIKeyHandler(c *gin.Context, deps dependencies.Dependencies) {
 	}
 
 	// Return the authentication key in the response
-	c.JSON(http.StatusOK, gin.H{
+	c.JSON(http.StatusCreated, gin.H{
 		"API_KEY": apiKey,
 	})
 }
