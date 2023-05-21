@@ -13,7 +13,7 @@ import (
 func SetupAPIKeyRoutes(r *gin.Engine, deps dependencies.Dependencies) {
 	apiKeyRoutes := r.Group("/api-key")
 	{
-		apiKeyRoutes.GET("/generate",
+		apiKeyRoutes.POST("/generate",
 			middleware.ValidateModelMiddleware(&models.APIKeyGenerateRequest{}),
 			func(c *gin.Context) {
 				controllers.GenerateAPIKeyHandler(c, deps)
@@ -21,7 +21,7 @@ func SetupAPIKeyRoutes(r *gin.Engine, deps dependencies.Dependencies) {
 		)
 
 		apiKeyRoutes.GET("/usage",
-			middleware.APIKeyValidationMiddleware(),
+			middleware.APIKeyValidationMiddleware(deps.BadgerService),
 			func(c *gin.Context) {
 				controllers.APIKeyUsageHandler(c, deps)
 			},
