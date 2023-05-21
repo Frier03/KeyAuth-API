@@ -5,7 +5,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func APIKeyUsageMiddleware(badgerService *services.BadgerService) gin.HandlerFunc {
+func TrackKeyUsage(badgerService *services.BadgerService) gin.HandlerFunc {
 	return func(c *gin.Context) {
+
 	}
 }
