@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"encoding/json"
 	"log"
 	"net/http"
 	"time"
@@ -19,23 +20,30 @@ func GenerateAPIKeyHandler(c *gin.Context, deps dependencies.Dependencies) {
 	// Try assert the request model to *models.APIKEYGenerateRequest
 	genReq, _ := req.(*models.APIKeyGenerateRequest)
 
-	// Get UUID
+	// Get UUID from request
 	uuid := genReq.UUID
+
+	// Generate a new UUID for the api key
+	ID := utils.GenerateUUID()
 
 	// Generate an authentication key
 	apiKey := utils.GenerateAPIKey()
 
 	// Create an instance of the APIKey struct
 	apiKeyInstance := &models.APIKey{
-		ID:        uuid,
-		APIKey:    apiKey,
+		ID:        ID,
 		Usage:     0,
+		Limit:     1000,
 		CreatedAt: time.Now(),
-		ExpiresAt: time.Now().Add(time.Hour),
+		ExpiresAt: time.Now().AddDate(0, 2, 1), // Example expires at time, two months and 1 day from now
+		LastUsed:  time.Now(),
+		Active:    true,
+		SubjectID: uuid,
+		Roles:     []string{"default"},
 	}
 
 	// Store the APIKey in the database
-	err := deps.BadgerService.PutAPIKey([]byte("api_key"), apiKeyInstance)
+	err := deps.BadgerService.PutAPIKey([]byte(apiKey), apiKeyInstance)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -47,11 +55,22 @@ func GenerateAPIKeyHandler(c *gin.Context, deps dependencies.Dependencies) {
 }
 
 // Handler for the /api-key/usage endpoint
-func APIKeyUsageHandler(c *gin.Context) {
-	// Your logic to check the API key usage here
+func APIKeyUsageHandler(c *gin.Context, deps dependencies.Dependencies) {
+	apiKey, _ := c.Get("x-api-key")
+	apiKeyStr := apiKey.(string)
 
-	// Assuming you want to return a JSON response
+	result, err := deps.BadgerService.Get([]byte(apiKeyStr))
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	var apiKeyModel models.APIKey
+	err = json.Unmarshal(result, &apiKeyModel)
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	c.JSON(http.StatusOK, gin.H{
-		"message": "API key usage endpoint",
+		"message": apiKeyModel,
 	})
 }
