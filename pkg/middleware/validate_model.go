@@ -8,7 +8,7 @@ import (
 	"github.com/Frier03/KeyAuth-API/pkg/models"
 )
 
-func ValidateModelMiddleware(model interface{}) gin.HandlerFunc {
+func ValidateModel(model interface{}) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		if err := c.ShouldBindJSON(model); err != nil {
 			c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{

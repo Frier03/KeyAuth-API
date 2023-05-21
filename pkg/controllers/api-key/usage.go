@@ -13,10 +13,10 @@ import (
 )
 
 func Usage(c *gin.Context, deps dependencies.Dependencies) {
-	apiKey, _ := c.Get("api-key-model")
+	apiKeyData, _ := c.Get("api-key-model")
 
 	// Apply model to apiKey
-	apiKeyModel, _ := apiKey.(models.APIKey)
+	apiKeyModel, _ := apiKeyData.(models.APIKey)
 
 	c.JSON(http.StatusOK, gin.H{
 		"message": apiKeyModel,
