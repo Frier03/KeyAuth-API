@@ -9,8 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// APIKeyValidationMiddleware is a middleware to validate the API key
-func APIKeyValidationMiddleware(badgerService *services.BadgerService) gin.HandlerFunc {
+func ValidateKey(badgerService *services.BadgerService) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		apiKey := c.GetHeader("X-Api-Key")
 
@@ -49,7 +48,7 @@ func APIKeyValidationMiddleware(badgerService *services.BadgerService) gin.Handl
 			return
 		}
 
-		c.Set("x-api-key", apiKey)
+		c.Set("api-key-model", apiKeyModel)
 		c.Next()
 	}
 }
