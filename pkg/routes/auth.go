@@ -3,7 +3,7 @@ package routes
 import (
 	"github.com/gin-gonic/gin"
 
-	"github.com/Frier03/KeyAuth-API/pkg/controllers"
+	auth "github.com/Frier03/KeyAuth-API/pkg/controllers/auth"
 	"github.com/Frier03/KeyAuth-API/pkg/middleware"
 	"github.com/Frier03/KeyAuth-API/pkg/models"
 )
@@ -14,16 +14,16 @@ func SetupAuthRoutes(r *gin.Engine) {
 	{
 		authRoutes.POST("/login",
 			middleware.ValidateModelMiddleware(&models.LoginRequest{}), // Validate login request payload
-			controllers.LoginHandler,                                   // Expected resource logic
+			auth.Login, // Expected resource logic
 		)
 
 		authRoutes.POST("/register",
 			middleware.ValidateModelMiddleware(&models.RegisterRequest{}), // Validate register request payload
-			controllers.LogoutHandler,                                     // Expected resource logic
+			auth.Register, // Expected resource logic
 		)
 
 		authRoutes.POST("/logout",
-			controllers.LogoutHandler, // Expected resource logic
+			auth.Logout, // Expected resource logic
 		)
 	}
 }

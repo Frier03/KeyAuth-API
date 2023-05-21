@@ -1,7 +1,10 @@
+/*
+/api-key/generate
+*/
+
 package controllers
 
 import (
-	"encoding/json"
 	"log"
 	"net/http"
 	"time"
@@ -12,16 +15,15 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// Handler for generating an authentication key
-func GenerateAPIKeyHandler(c *gin.Context, deps dependencies.Dependencies) {
+func Generate(c *gin.Context, deps dependencies.Dependencies) {
 	// Retrieve the generate api key request model from the context
 	req, _ := c.Get("model")
 
-	// Try assert the request model to *models.APIKEYGenerateRequest
-	genReq, _ := req.(*models.APIKeyGenerateRequest)
+	// Apply model to req
+	reqModel, _ := req.(*models.APIKeyGenerateRequest)
 
 	// Get UUID from request
-	uuid := genReq.UUID
+	uuid := reqModel.UUID
 
 	// Generate a new UUID for the api key
 	ID := utils.GenerateUUID()
@@ -51,26 +53,5 @@ func GenerateAPIKeyHandler(c *gin.Context, deps dependencies.Dependencies) {
 	// Return the authentication key in the response
 	c.JSON(http.StatusCreated, gin.H{
 		"API_KEY": apiKey,
-	})
-}
-
-// Handler for the /api-key/usage endpoint
-func APIKeyUsageHandler(c *gin.Context, deps dependencies.Dependencies) {
-	apiKey, _ := c.Get("x-api-key")
-	apiKeyStr := apiKey.(string)
-
-	result, err := deps.BadgerService.Get([]byte(apiKeyStr))
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	var apiKeyModel models.APIKey
-	err = json.Unmarshal(result, &apiKeyModel)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	c.JSON(http.StatusOK, gin.H{
-		"message": apiKeyModel,
 	})
 }

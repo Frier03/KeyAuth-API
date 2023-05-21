@@ -49,7 +49,8 @@ func APIKeyValidationMiddleware(badgerService *services.BadgerService) gin.Handl
 			return
 		}
 
-		c.Set("x-api-key", apiKey)
+		// Set custom header for the api key model retrieved
+		c.Set("api-key-model", apiKeyModel)
 		c.Next()
 	}
 }
