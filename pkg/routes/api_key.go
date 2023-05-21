@@ -3,7 +3,7 @@ package routes
 import (
 	"github.com/gin-gonic/gin"
 
-	"github.com/Frier03/KeyAuth-API/pkg/controllers"
+	api "github.com/Frier03/KeyAuth-API/pkg/controllers/api-key"
 	"github.com/Frier03/KeyAuth-API/pkg/dependencies"
 	"github.com/Frier03/KeyAuth-API/pkg/middleware"
 	"github.com/Frier03/KeyAuth-API/pkg/models"
@@ -16,14 +16,14 @@ func SetupAPIKeyRoutes(r *gin.Engine, deps dependencies.Dependencies) {
 		apiKeyRoutes.POST("/generate",
 			middleware.ValidateModelMiddleware(&models.APIKeyGenerateRequest{}),
 			func(c *gin.Context) {
-				controllers.GenerateAPIKeyHandler(c, deps)
+				api.Generate(c, deps)
 			},
 		)
 
 		apiKeyRoutes.GET("/usage",
 			middleware.APIKeyValidationMiddleware(deps.BadgerService),
 			func(c *gin.Context) {
-				controllers.APIKeyUsageHandler(c, deps)
+				api.Usage(c, deps)
 			},
 		)
 	}
