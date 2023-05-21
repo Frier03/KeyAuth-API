@@ -35,7 +35,7 @@ func ValidateKey(badgerService *services.BadgerService) gin.HandlerFunc {
 		err = json.Unmarshal(value, &apiKeyModel)
 		if err != nil {
 			c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
-				"error": "API key has invalid format?",
+				"error": "API key has invalid format",
 			})
 			return
 		}
