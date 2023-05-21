@@ -16,3 +16,8 @@ Content-Type: application/json
 # @name usage
 GET {{baseUrl}}/api-key/usage HTTP/1.1
 X-Api-Key: {{API_KEY}}
+
+
+### Adjust the API key permission level
+PATCH {{baseUrl}}/api-key/role/adjust?permission_level=1 HTTP/1.1
+X-Api-Key: {{API_KEY}}
