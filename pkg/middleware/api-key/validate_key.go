@@ -48,7 +48,6 @@ func ValidateKey(badgerService *services.BadgerService) gin.HandlerFunc {
 			return
 		}
 
-		// Set custom header for the api key model retrieved
 		c.Set("api-key-model", apiKeyModel)
 		c.Next()
 	}

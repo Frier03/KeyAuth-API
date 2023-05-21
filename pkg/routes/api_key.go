@@ -23,6 +23,7 @@ func SetupAPIKeyRoutes(r *gin.Engine, deps dependencies.Dependencies) {
 
 		apiKeyRoutes.GET("/usage",
 			apiMiddleware.ValidateKey(deps.BadgerService),
+			apiMiddleware.TrackKeyUsage(deps.BadgerService),
 			func(c *gin.Context) {
 				apiController.Usage(c, deps)
 			},
