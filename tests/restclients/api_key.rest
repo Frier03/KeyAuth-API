@@ -1,6 +1,18 @@
-GET http://localhost:8080/api-key/generate
+@baseUrl = http://localhost:8080
+
+### Generate a new API Key
+# @name generate
+GET {{baseUrl}}/api-key/generate HTTP/1.1
 Content-Type: application/json
 
 {
     "UUID": "a1f44782-6499-4d1e-948d-1ab37ad23b82-9a79bc5f585b0d7002a3400943585372"
 }
+
+### Get response from generate and store in API_KEY
+@API_KEY={{generate.response.body.API_KEY}}
+
+### Check the usage of an API Key
+# @name usage
+GET {{baseUrl}}/api-key/usage HTTP/1.1
+X-Api-Key: {{API_KEY}}
