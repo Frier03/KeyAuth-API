@@ -33,15 +33,15 @@ func Generate(c *gin.Context, deps dependencies.Dependencies) {
 
 	// Create an instance of the APIKey struct
 	apiKeyInstance := &models.APIKey{
-		ID:        ID,
-		Usage:     0,
-		Limit:     1000,
-		CreatedAt: time.Now(),
-		ExpiresAt: time.Now().AddDate(0, 2, 1), // Example expires at time, two months and 1 day from now
-		LastUsed:  time.Now(),
-		Active:    true,
-		SubjectID: uuid,
-		Roles:     []string{"default"},
+		ID:              ID,
+		Usage:           0,
+		Limit:           1000,
+		CreatedAt:       time.Now(),
+		ExpiresAt:       time.Now().AddDate(0, 2, 1), // Example expires at time, two months and 1 day from now
+		LastUsed:        time.Now(),
+		Active:          true,
+		SubjectID:       uuid,
+		PermissionLevel: 0,
 	}
 
 	// Store the APIKey in the database

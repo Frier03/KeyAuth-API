@@ -3,10 +3,14 @@ package routes
 import (
 	"github.com/gin-gonic/gin"
 
-	apiController "github.com/Frier03/KeyAuth-API/pkg/controllers/api-key"
+	apiKey "github.com/Frier03/KeyAuth-API/pkg/controllers/api-key"
+	apiKeyRole "github.com/Frier03/KeyAuth-API/pkg/controllers/api-key/role"
+
 	"github.com/Frier03/KeyAuth-API/pkg/dependencies"
+
 	middleware "github.com/Frier03/KeyAuth-API/pkg/middleware"
-	apiMiddleware "github.com/Frier03/KeyAuth-API/pkg/middleware/api-key"
+	middlewareApiKey "github.com/Frier03/KeyAuth-API/pkg/middleware/api-key"
+
 	"github.com/Frier03/KeyAuth-API/pkg/models"
 )
 
@@ -17,15 +21,23 @@ func SetupAPIKeyRoutes(r *gin.Engine, deps dependencies.Dependencies) {
 		apiKeyRoutes.POST("/generate",
 			middleware.ValidateModel(&models.APIKeyGenerateRequest{}),
 			func(c *gin.Context) {
-				apiController.Generate(c, deps)
+				apiKey.Generate(c, deps)
+			},
+		)
+
+		apiKeyRoutes.PATCH("/role/adjust",
+			middlewareApiKey.ValidateKey(deps.BadgerService),
+			middlewareApiKey.TrackKeyUsage(deps.BadgerService),
+			func(c *gin.Context) {
+				apiKeyRole.Adjust(c, deps.BadgerService)
 			},
 		)
 
 		apiKeyRoutes.GET("/usage",
-			apiMiddleware.ValidateKey(deps.BadgerService),
-			apiMiddleware.TrackKeyUsage(deps.BadgerService),
+			middlewareApiKey.ValidateKey(deps.BadgerService),
+			middlewareApiKey.TrackKeyUsage(deps.BadgerService),
 			func(c *gin.Context) {
-				apiController.Usage(c, deps)
+				apiKey.Usage(c)
 			},
 		)
 	}
