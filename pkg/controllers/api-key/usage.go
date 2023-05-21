@@ -7,12 +7,11 @@ package controllers
 import (
 	"net/http"
 
-	"github.com/Frier03/KeyAuth-API/pkg/dependencies"
 	"github.com/Frier03/KeyAuth-API/pkg/models"
 	"github.com/gin-gonic/gin"
 )
 
-func Usage(c *gin.Context, deps dependencies.Dependencies) {
+func Usage(c *gin.Context) {
 	apiKeyData, _ := c.Get("api-key-model")
 
 	// Apply model to apiKey
