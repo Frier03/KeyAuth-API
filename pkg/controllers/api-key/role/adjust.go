@@ -1,7 +1,6 @@
 package role
 
 import (
-	"fmt"
 	"net/http"
 	"strconv"
 
@@ -12,12 +11,12 @@ import (
 
 func Adjust(c *gin.Context, badgerService *services.BadgerService) {
 	apiKey := c.GetHeader("X-Api-Key")
-	adjust, ok := c.GetQuery("permission_level")
+	adjust, _ := c.GetQuery("permission_level")
 	apiKeyData, _ := c.Get("api-key-model")
 
 	// Apply model to apiKey
 	apiKeyModel, _ := apiKeyData.(models.APIKey)
-	fmt.Println(adjust, ok)
+
 	// Validate adjust value
 	level, err := strconv.Atoi(adjust)
 	if err != nil {
