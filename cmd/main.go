@@ -9,11 +9,13 @@ import (
 
 func main() {
 	// Create a new Gin Router
-	r := gin.Default()
+	router := gin.Default()
 
-	r.ForwardedByClientIP = true
+	router.LoadHTMLGlob("../pkg/adminpanel/templates/*.html")
 
-	r.SetTrustedProxies([]string{
+	router.ForwardedByClientIP = true
+
+	router.SetTrustedProxies([]string{
 		"127.0.0.1",
 		"::1",
 		"localhost",
@@ -28,11 +30,11 @@ func main() {
 		return
 	}
 
-	// Set up authentication routes
-	routes.SetupAuthRoutes(r)
+	// Set up admin panel route
+	routes.SetupAdminPanelRoutes(router)
 
 	// Set up api key routes
-	routes.SetupAPIKeyRoutes(r, *deps)
+	routes.SetupAPIKeyRoutes(router, *deps)
 
-	r.Run(":8080")
+	router.Run(":8080")
 }
