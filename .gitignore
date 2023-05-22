@@ -4,5 +4,8 @@
 *.so
 *.dylib
 
+# env
+.env
+
 # Ignore other build artifacts and directories as needed
 vendor/
