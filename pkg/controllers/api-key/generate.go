@@ -34,6 +34,7 @@ func Generate(c *gin.Context, deps dependencies.Dependencies) {
 	// Create an instance of the APIKey struct
 	apiKeyInstance := &models.APIKey{
 		ID:              ID,
+		KEY:             apiKey,
 		Usage:           0,
 		Limit:           1000,
 		CreatedAt:       time.Now(),
