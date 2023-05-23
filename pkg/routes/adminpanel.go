@@ -1,20 +1,23 @@
 package routes
 
 import (
-	"github.com/gin-gonic/gin"
-
 	"github.com/Frier03/KeyAuth-API/pkg/adminpanel"
 	controllers "github.com/Frier03/KeyAuth-API/pkg/controllers/adminpanel"
+	"github.com/Frier03/KeyAuth-API/pkg/dependencies"
 	middleware "github.com/Frier03/KeyAuth-API/pkg/middleware/adminpanel"
+	"github.com/gin-gonic/gin"
 )
 
 // Set up auth keys route
-func SetupAdminPanelRoutes(r *gin.Engine) {
+func SetupAdminPanelRoutes(r *gin.Engine, deps dependencies.Dependencies) {
 	adminPanelRoutes := r.Group("/adminpanel")
 	{
 		adminPanelRoutes.GET("/",
 			middleware.Authorization(),
-			adminpanel.RenderIndexPage,
+			func(c *gin.Context) {
+				adminpanel.RenderDashboardPage(c, deps.BadgerService)
+			},
+			controllers.DashboardController,
 		)
 
 		adminPanelRoutes.GET("/login", adminpanel.RenderLoginPage)
