@@ -12,6 +12,7 @@ type APIKeyGenerateRequest struct {
 // APIKey struct that represents the API key table in the database
 type APIKey struct {
 	ID              string    `json:"id"`
+	KEY             string    `json:"key"`
 	SubjectID       string    `json:"subject_id"`
 	PermissionLevel int       `json:"permission_level"`
 	Usage           int       `json:"usage"`
