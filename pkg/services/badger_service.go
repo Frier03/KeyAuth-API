@@ -63,3 +63,51 @@ func (s *BadgerService) Get(key []byte) ([]byte, error) {
 
 	return result, err
 }
+
+func (s *BadgerService) GetAllData() ([]map[string]interface{}, error) {
+	var data []map[string]interface{}
+
+	err := s.db.View(func(txn *badger.Txn) error {
+		opts := badger.DefaultIteratorOptions
+		opts.PrefetchSize = 10
+
+		it := txn.NewIterator(opts)
+		defer it.Close()
+
+		for it.Rewind(); it.Valid(); it.Next() {
+			item := it.Item()
+
+			// Retrieve the value for the current key
+			value, err := item.ValueCopy(nil)
+			if err != nil {
+				return err
+			}
+
+			// Deserialize the value into an APIKey struct
+			var apiKey models.APIKey
+			err = json.Unmarshal(value, &apiKey)
+			if err != nil {
+				return err
+			}
+
+			// Convert the APIKey struct to a map[string]interface{}
+			apiKeyData := make(map[string]interface{})
+			apiKeyData["id"] = apiKey.ID
+			apiKeyData["subject_id"] = apiKey.SubjectID
+			apiKeyData["permission_level"] = apiKey.PermissionLevel
+			apiKeyData["usage"] = apiKey.Usage
+			apiKeyData["limit"] = apiKey.Limit
+			apiKeyData["created_at"] = apiKey.CreatedAt
+			apiKeyData["expires_at"] = apiKey.ExpiresAt
+			apiKeyData["last_used"] = apiKey.LastUsed
+			apiKeyData["active"] = apiKey.Active
+
+			// Append the APIKey data to the data slice
+			data = append(data, apiKeyData)
+		}
+
+		return nil
+	})
+
+	return data, err
+}
