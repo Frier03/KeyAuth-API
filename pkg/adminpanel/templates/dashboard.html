@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>API Admin Panel</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<link href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,700' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="/static/dashboard.css">
+</head>
+
+<body>
+	<section>
+		<div class="container">
+			<div class="header">
+				<h2>API Admin Panel</h2>
+			</div>
+		</div>
+		<div class="container">
+			<table class="table">
+				<thead>
+					<tr>
+						<th>API Key</th>
+						<th>Usage</th>
+						<th>Last Used</th>
+						<th>Permission Level</th>
+						<th>Expiration</th>
+						<th>Status</th>
+					</tr>
+				</thead>
+				<table>
+					<tbody>
+						{{ range .APIKeys }}
+						<tr class="table-row">
+							<td>
+								<div class="api-key">
+									<span class="api-key-value">{{ .ID }}</span>
+									<span class="created-at">Created at: {{ .CreatedAt.Format "01/02/2006" }}</span>
+								</div>
+							</td>
+							<td>{{ .Usage }}/100</td>
+							<td>{{ .LastUsed.Format "02 Jan 2006 15:04:05 MST" }}</td>
+							<td>{{ .PermissionLevel }}</td>
+							<td>{{ .ExpiresAt.Format "02 Jan 2006" }} left</td>
+							<td>
+								<span class="status {{ if .Active }}active{{ else }}inactive{{ end }}"></span>
+							</td>
+						</tr>
+						{{ end }}
+					</tbody>
+				</table>
+			</table>
+		</div>
+	</section>
+</body>
+
+</html>
