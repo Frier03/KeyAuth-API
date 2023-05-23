@@ -31,15 +31,19 @@ func Generate(c *gin.Context, deps dependencies.Dependencies) {
 	// Generate an authentication key
 	apiKey := utils.GenerateAPIKey()
 
+	createdAt := time.Now().AddDate(0, 0, 0)
+	expiresAt := time.Now().AddDate(0, 2, 1)
+	lastUsed := time.Now().AddDate(0, 0, 0)
+
 	// Create an instance of the APIKey struct
 	apiKeyInstance := &models.APIKey{
 		ID:              ID,
 		KEY:             apiKey,
 		Usage:           0,
 		Limit:           1000,
-		CreatedAt:       time.Now(),
-		ExpiresAt:       time.Now().AddDate(0, 2, 1), // Example expires at time, two months and 1 day from now
-		LastUsed:        time.Now(),
+		CreatedAt:       createdAt.String(),
+		ExpiresAt:       expiresAt.String(), // Example expires at time, two months and 1 day from now
+		LastUsed:        lastUsed.String(),
 		Active:          true,
 		SubjectID:       uuid,
 		PermissionLevel: 0,

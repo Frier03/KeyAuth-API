@@ -29,7 +29,8 @@ func TrackKeyUsage(badgerService *services.BadgerService) gin.HandlerFunc {
 		apiKeyModel.Usage++
 
 		// Update the API last used
-		apiKeyModel.LastUsed = time.Now()
+		lastUsed := time.Now().AddDate(0, 0, 0)
+		apiKeyModel.LastUsed = lastUsed.String()
 
 		// Update the API key in the database
 		err := badgerService.PutAPIKey([]byte(apiKey), &apiKeyModel)
