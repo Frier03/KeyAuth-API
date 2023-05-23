@@ -12,6 +12,7 @@ func main() {
 	router := gin.Default()
 
 	router.LoadHTMLGlob("../pkg/adminpanel/templates/*.html")
+	router.Static("/static", "../pkg/adminpanel/styles")
 
 	router.ForwardedByClientIP = true
 
@@ -31,7 +32,7 @@ func main() {
 	}
 
 	// Set up admin panel route
-	routes.SetupAdminPanelRoutes(router)
+	routes.SetupAdminPanelRoutes(router, *deps)
 
 	// Set up api key routes
 	routes.SetupAPIKeyRoutes(router, *deps)
