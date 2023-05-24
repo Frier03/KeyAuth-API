@@ -17,7 +17,6 @@ func SetupAdminPanelRoutes(r *gin.Engine, deps dependencies.Dependencies) {
 			func(c *gin.Context) {
 				adminpanel.RenderDashboardPage(c, deps.BadgerService)
 			},
-			controllers.DashboardController,
 		)
 
 		adminPanelRoutes.GET("/login", adminpanel.RenderLoginPage)
