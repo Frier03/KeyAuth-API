@@ -2,8 +2,10 @@ package services
 
 import (
 	"encoding/json"
+	"time"
 
 	"github.com/Frier03/KeyAuth-API/pkg/models"
+	"github.com/Frier03/KeyAuth-API/pkg/utils"
 	"github.com/dgraph-io/badger/v3"
 )
 
@@ -64,8 +66,8 @@ func (s *BadgerService) Get(key []byte) ([]byte, error) {
 	return result, err
 }
 
-func (s *BadgerService) GetAllData() ([]map[string]interface{}, error) {
-	var data []map[string]interface{}
+func (s *BadgerService) GetAllData() ([]models.APIKey, error) {
+	var apiKeys []models.APIKey
 
 	err := s.db.View(func(txn *badger.Txn) error {
 		opts := badger.DefaultIteratorOptions
@@ -90,24 +92,80 @@ func (s *BadgerService) GetAllData() ([]map[string]interface{}, error) {
 				return err
 			}
 
-			// Convert the APIKey struct to a map[string]interface{}
-			apiKeyData := make(map[string]interface{})
-			apiKeyData["id"] = apiKey.ID
-			apiKeyData["subject_id"] = apiKey.SubjectID
-			apiKeyData["permission_level"] = apiKey.PermissionLevel
-			apiKeyData["usage"] = apiKey.Usage
-			apiKeyData["limit"] = apiKey.Limit
-			apiKeyData["created_at"] = apiKey.CreatedAt
-			apiKeyData["expires_at"] = apiKey.ExpiresAt
-			apiKeyData["last_used"] = apiKey.LastUsed
-			apiKeyData["active"] = apiKey.Active
+			// Apply necessary formatting to the APIKey struct
+			apiKey.CreatedAt = utils.FormatCreatedAt(apiKey.CreatedAt)
+			apiKey.ExpiresAt = utils.FormatExpiresAt(apiKey.ExpiresAt)
+			apiKey.LastUsed = utils.FormatUsedAt(apiKey.LastUsed)
 
-			// Append the APIKey data to the data slice
-			data = append(data, apiKeyData)
+			// Append the APIKey to the apiKeys slice
+			apiKeys = append(apiKeys, apiKey)
 		}
 
 		return nil
 	})
 
-	return data, err
+	return apiKeys, err
+}
+
+func (s *BadgerService) FetchTotalGeneratedAPIKeys() int {
+	count := 0
+
+	err := s.db.View(func(txn *badger.Txn) error {
+		opts := badger.DefaultIteratorOptions
+		opts.PrefetchSize = 10 // Adjust the prefetch size for performance
+
+		it := txn.NewIterator(opts)
+		defer it.Close()
+
+		for it.Rewind(); it.Valid(); it.Next() {
+			count++
+		}
+
+		return nil
+	})
+
+	if err != nil {
+		return 0
+	}
+
+	return count
+}
+
+func (s *BadgerService) FetchTotalExpiredAPIKeys() int {
+	count := 0
+	timeLayout := "2006-01-02 15:04:05.999999999 -0700 MST"
+
+	err := s.db.View(func(txn *badger.Txn) error {
+		opts := badger.DefaultIteratorOptions
+		opts.PrefetchSize = 10 // Adjust the prefetch size for performance
+
+		it := txn.NewIterator(opts)
+		defer it.Close()
+
+		for it.Rewind(); it.Valid(); it.Next() {
+			item := it.Item()
+
+			// Retrieve the ExpiresAt value from the key's metadata
+			expiresAt := item.UserMeta()
+
+			// Parse the ExpiresAt value as a time.Time
+			t, err := time.Parse(timeLayout, string(expiresAt))
+			if err != nil {
+				return err
+			}
+
+			// Check if the key has expired
+			if t.Before(time.Now()) {
+				count++
+			}
+		}
+
+		return nil
+	})
+
+	if err != nil {
+		return 0
+	}
+
+	return count
 }
