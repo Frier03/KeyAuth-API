@@ -2,55 +2,116 @@
 <html lang="en">
 
 <head>
-	<title>API Admin Panel</title>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<link href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,700' rel='stylesheet' type='text/css'>
-	<link rel="stylesheet" href="/static/dashboard.css">
+    <title>API Admin Panel</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="/static/dashboard.css">
 </head>
 
 <body>
-	<section>
-		<div class="container">
-			<div class="header">
-				<h2>API Admin Panel</h2>
-			</div>
-		</div>
-		<div class="container">
-			<table class="table">
-				<thead>
-					<tr>
-						<th>API Key</th>
-						<th>Usage</th>
-						<th>Last Used</th>
-						<th>Permission Level</th>
-						<th>Expiration</th>
-						<th>Status</th>
-					</tr>
-				</thead>
+    <div class="sidebar">
+        <h3>Admin Panel</h3>
+        <ul>
+            <li><a href="#" onclick="showDashboard()">Dashboard</a></li>
+            <li><a href="#" onclick="showAPIKeys()">API Keys</a></li>
+            <li><a href="#" onclick="showSettings()">Settings</a></li>
+        </ul>
+    </div>
 
-				<tbody>
-					{{ range .APIKeys }}
-						<tr class="table-row">
-							<td>
-								<div class="api-key">
-									<span class="api-key-value">{{ .ID }}</span>
-									<span class="created-at">Created at: {{ .CreatedAt }}</span>
-								</div>
-							</td>
-							<td>{{ .Usage }}/ {{ .Limit }}</td>
-							<td>{{ .LastUsed }}</td>
-							<td>{{ .PermissionLevel }}</td>
-							<td>{{ .ExpiresAt }}</td>
-							<td>
-								<span class="status {{ if .Active }}active{{ else }}inactive{{ end }}"></span>
-							</td>
-						</tr>
-					{{ end }}
-				</tbody>
-			</table>
-		</div>
-	</section>
+    <div class="main-content">
+        <div class="navbar">
+            <h2>API Admin Panel</h2>
+        </div>
+
+        <section id="dashboard-section">
+            <div class="container">
+				<div class="dashboard-stats">
+					<div class="dashboard-stat">
+						<h3>Total Number of API Keys Generated</h3>
+						<p>{{ .TotalGeneratedAPIKeys }}</p>
+					</div>
+					<div class="dashboard-stat">
+						<h3>Total Number of API Keys Expired</h3>
+						<p>{{ .TotalExpiredAPIKeys }}</p>
+					</div>
+				</div>
+	
+				<div class="dashboard-graph">
+					<!-- Graph content here -->
+				</div>
+	
+				<table class="table">
+					<!-- Table content here -->
+				</table>
+			</div>
+        </section>
+
+        <section id="api-keys-section" style="display: none;">
+            <div class="container">
+                <!-- Content for the API Keys section goes here -->
+                <h1>API Keys</h1>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>API Key</th>
+                            <th>Usage</th>
+                            <th>Last Used</th>
+                            <th>Permission Level</th>
+                            <th>Expiration</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{ range .APIKeys }}
+                        <tr class="table-row">
+                            <td>
+                                <div class="api-key">
+                                    <span class="api-key-value">{{ .ID }}</span>
+                                    <span class="created-at">Created at: {{ .CreatedAt }}</span>
+                                </div>
+                            </td>
+                            <td>{{ .Usage }}/{{ .Limit }}</td>
+                            <td>{{ .LastUsed }}</td>
+                            <td>{{ .PermissionLevel }}</td>
+                            <td>{{ .ExpiresAt }}</td>
+                            <td>
+                                <span class="status {{ if .Active }}active{{ else }}inactive{{ end }}"></span>
+                            </td>
+                        </tr>
+                        {{ end }}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="settings-section" style="display: none;">
+            <div class="container">
+                <!-- Content for the Settings section goes here -->
+                <h1>Settings</h1>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        function showDashboard() {
+            document.getElementById("dashboard-section").style.display = "block";
+            document.getElementById("api-keys-section").style.display = "none";
+            document.getElementById("settings-section").style.display = "none";
+        }
+
+        function showAPIKeys() {
+            document.getElementById("dashboard-section").style.display = "none";
+            document.getElementById("api-keys-section").style.display = "block";
+            document.getElementById("settings-section").style.display = "none";
+        }
+
+        function showSettings() {
+            document.getElementById("dashboard-section").style.display = "none";
+            document.getElementById("api-keys-section").style.display = "none";
+            document.getElementById("settings-section").style.display = "block";
+        }
+    </script>
 </body>
 
 </html>
