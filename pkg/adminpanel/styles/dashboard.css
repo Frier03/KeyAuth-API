@@ -1,3 +1,4 @@
+/* General styles for the dashboard */
 body {
     background-color: #fff;
     font-family: 'Roboto', sans-serif;
@@ -77,8 +78,92 @@ th {
 
 .table-row:hover {
     background-color: #e6f0ff;
-    /* Set the desired light blue color */
     transition: background-color 0.3s;
-    /* Add a smooth transition effect */
     cursor: pointer;
+}
+
+
+/* Styles for the admin panel sidebar */
+.sidebar {
+    background-color: #333;
+    color: #fff;
+    width: 200px;
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+    padding: 20px;
+}
+
+.sidebar h3 {
+    color: #fff;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+.sidebar ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar li {
+    margin-bottom: 10px;
+}
+
+.sidebar a {
+    color: #fff;
+    text-decoration: none;
+}
+
+.sidebar a:hover {
+    text-decoration: underline;
+}
+
+
+/* Styles for the dashboard statistics */
+.dashboard-stats {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 40px;
+}
+
+.dashboard-stat {
+    flex-basis: 24%;
+    background-color: #f9f9f9;
+    border-radius: 6px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-stat h3 {
+    color: #333;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.dashboard-stat ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.dashboard-stat ul li {
+    margin-bottom: 8px;
+}
+
+.dashboard-stat p {
+    color: #333;
+    font-weight: 700;
+    margin: 0;
+    font-size: 24px;
+}
+
+/* Styles for the dashboard graph */
+.dashboard-graph {
+    background-color: #f9f9f9;
+    border-radius: 6px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 40px;
 }
